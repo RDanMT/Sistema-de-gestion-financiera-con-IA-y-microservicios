@@ -1,0 +1,24 @@
+{
+  "name": "sistema-financiero-root",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Plataforma de gestión financiera personal con arquitectura de microservicios",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:bff\" \"npm run dev:engine\" \"npm run dev:frontend\"",
+    "dev:bff": "cd services/bff && npm run dev",
+    "dev:engine": "cd services/financial-engine && uvicorn app.main:app --reload --port 8000",
+    "dev:frontend": "cd frontend && npm run dev",
+    "test": "npm run test:bff && npm run test:engine",
+    "test:bff": "cd services/bff && npm test",
+    "test:engine": "cd services/financial-engine && pytest tests/ -v --cov=app",
+    "install:all": "npm run install:bff && npm run install:frontend",
+    "install:bff": "cd services/bff && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "lint:commits": "commitlint --from HEAD~1 --to HEAD --verbose"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "concurrently": "^8.2.2"
+  }
+}
