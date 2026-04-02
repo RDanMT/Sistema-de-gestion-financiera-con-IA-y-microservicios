@@ -1,5 +1,24 @@
 const mongoose = require('mongoose');
 const { logger } = require('./env');
+const User = require('../models/User');
+
+const seedDatabase = async () => {
+  try {
+    const defaultUser = await User.findOne({ email: 'evaluador@finanzas.com' });
+    if (!defaultUser) {
+      logger.info('🌱 Primera corrida detectada. Inyectando usuario semilla...');
+      await User.create({
+        nombre: 'Profesor Evaluador',
+        email: 'evaluador@finanzas.com',
+        password: 'password123',
+        role: 'admin'
+      });
+      logger.info('✅ Usuario inyectado (evaluador@finanzas.com : password123)');
+    }
+  } catch (error) {
+    logger.error(`Error al plantar semilla: ${error.message}`);
+  }
+};
 
 const connectDB = async () => {
   try {
@@ -9,6 +28,9 @@ const connectDB = async () => {
     });
 
     logger.info(`✅ MongoDB conectado: ${conn.connection.host}`);
+    
+    // Plantar la semilla inicial
+    await seedDatabase();
 
     mongoose.connection.on('disconnected', () => {
       logger.warn('⚠️  MongoDB desconectado. Intentando reconectar...');

@@ -1,0 +1,6 @@
+Error: Servicio financiero no disponible: timeout of 30000ms exceeded\nError: Servicio financiero no disponible: timeout of 30000ms exceeded
+    at C:\Users\rdani\source\repos\REACT + IA\Sistema Inteligente de Gestión y Proyección Financiera (Microservicios)\services\bff\src\services\fastapi.service.js:28:11
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Axios.request (C:\Users\rdani\source\repos\REACT + IA\Sistema Inteligente de Gestión y Proyección Financiera (Microservicios)\services\bff\node_modules\axios\dist\node\axios.cjs:4232:14)
+    at async Object.calculateLoan (C:\Users\rdani\source\repos\REACT + IA\Sistema Inteligente de Gestión y Proyección Financiera (Microservicios)\services\bff\src\services\fastapi.service.js:33:20)
+    at async createLoan (C:\Users\rdani\source\repos\REACT + IA\Sistema Inteligente de Gestión y Proyección Financiera (Microservicios)\services\bff\src\controllers\loans.controller.js:11:24)\n

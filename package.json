@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:bff\" \"npm run dev:engine\" \"npm run dev:frontend\"",
     "dev:bff": "cd services/bff && npm run dev",
-    "dev:engine": "cd services/financial-engine && uvicorn app.main:app --reload --port 8000",
+    "dev:engine": "cd services/financial-engine && .\\.venv\\Scripts\\python -m uvicorn app.main:app --reload --port 8000",
     "dev:frontend": "cd frontend && npm run dev",
     "test": "npm run test:bff && npm run test:engine",
     "test:bff": "cd services/bff && npm test",
