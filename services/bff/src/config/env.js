@@ -40,6 +40,7 @@ const REQUIRED_VARS = [
   'JWT_SECRET',
   'REFRESH_TOKEN_SECRET',
   'FASTAPI_URL',
+  'FRONTEND_URL',
 ];
 
 const validateEnv = () => {
