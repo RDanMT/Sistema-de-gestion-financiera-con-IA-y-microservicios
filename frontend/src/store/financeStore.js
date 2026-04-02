@@ -24,7 +24,7 @@ export const useFinanceStore = create((set, get) => ({
   createLoan: async (loanData) => {
     try {
       const { data } = await loansAPI.create(loanData);
-      set((state) => ({ loans: [data.data.loan, ...state.loans] }));
+      await get().fetchLoans(); // <--- Sincronizar instantáneamente con el backend
       return { success: true, data: data.data };
     } catch (err) {
       return { success: false, error: err.response?.data?.error };
@@ -69,7 +69,7 @@ export const useFinanceStore = create((set, get) => ({
   createTransaction: async (txData) => {
     try {
       const { data } = await transactionsAPI.create(txData);
-      set((state) => ({ transactions: [data.data, ...state.transactions] }));
+      await get().fetchTransactions();
       return { success: true };
     } catch (err) {
       return { success: false, error: err.response?.data?.error };
