@@ -153,19 +153,32 @@ async def _call_ollama(system_prompt: str, user_message: str) -> str:
 
 
 async def _call_openai(system_prompt: str, user_message: str) -> str:
-    """Llama a OpenAI API con el prompt parametrizado."""
+    """Llama a OpenAI API, o a Gemini nativo si detecta llave AIza."""
     try:
-        from openai import AsyncOpenAI
-        client = AsyncOpenAI(api_key=settings.openai_api_key)
-        response = await client.chat.completions.create(
-            model=settings.llm_model,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_message},
-            ],
-            temperature=0.3,
-            max_tokens=400,
-        )
-        return response.choices[0].message.content
+        if settings.openai_api_key.startswith("AIza"):
+            # Usar API Nativa de Google Gemini
+            import httpx
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={settings.openai_api_key}"
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                resp = await client.post(url, json={
+                    "contents": [{"parts": [{"text": f"Contexto y Reglas: {system_prompt}\\n\\nUsuario: {user_message}"}]}],
+                    "generationConfig": {"temperature": 0.3}
+                })
+                resp.raise_for_status()
+                return resp.json()["candidates"][0]["content"]["parts"][0]["text"]
+        else:
+            # Usar API original estricta para OpenAI
+            from openai import AsyncOpenAI
+            client = AsyncOpenAI(api_key=settings.openai_api_key)
+            response = await client.chat.completions.create(
+                model=settings.llm_model,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_message},
+                ],
+                temperature=0.3,
+                max_tokens=400,
+            )
+            return response.choices[0].message.content
     except Exception as e:
-        return f"Error con OpenAI API: {str(e)}"
+        return f"Error con la API en la Nube: {str(e)}"
