@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { Loader2 } from 'lucide-react';
@@ -6,8 +6,14 @@ import toast from 'react-hot-toast';
 
 export default function Register() {
   const [form, setForm] = useState({ nombre: '', email: '', password: '', confirmPassword: '' });
-  const { register, isLoading } = useAuthStore();
+  const { register, isLoading, isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,7 +24,6 @@ export default function Register() {
     const result = await register(form.nombre, form.email, form.password);
     if (result.success) {
       toast.success('¡Cuenta creada exitosamente!');
-      navigate('/dashboard');
     } else {
       toast.error(result.error);
     }

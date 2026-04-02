@@ -7,15 +7,20 @@ import toast from 'react-hot-toast';
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
-  const { login, isLoading } = useAuthStore();
+  const { login, isLoading, isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await login(form.email, form.password);
     if (result.success) {
       toast.success('¡Bienvenido de vuelta!');
-      navigate('/dashboard');
     } else {
       toast.error(result.error);
     }

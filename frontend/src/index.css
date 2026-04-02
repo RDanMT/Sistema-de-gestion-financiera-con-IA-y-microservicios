@@ -991,16 +991,100 @@ tbody tr:last-child td { border-bottom: none; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
 /* ════════════════════════════════════════════════
+   MOBILE HEADER
+   ════════════════════════════════════════════════ */
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  z-index: 90;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.mobile-menu-toggle {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ════════════════════════════════════════════════
    RESPONSIVE
    ════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
-  .main-content { margin-left: 0; }
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: none;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: 20px 0 50px rgba(0,0,0,0.5);
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 95;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .sidebar { z-index: 100; }
+
+  .mobile-header { display: flex; }
+
+  .main-content {
+    margin-left: 0;
+    padding-top: 56px; /* Altura del mobile header */
+  }
+
   .page-container { padding: 20px; }
   .page-header { padding: 20px 20px 0; }
+  
   .grid-2 { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
   .metric-grid { grid-template-columns: 1fr 1fr; }
-  .auth-card { padding: 28px 24px; }
+  .auth-card { padding: 28px 24px; border-radius: 0; border: none; max-width: 100%; min-height: 100vh; }
+  .auth-page { padding: 0; }
+  
+  .page-title { font-size: 22px; }
+  .page-header { flex-direction: column; align-items: flex-start; }
+  .page-header .flex { width: 100%; }
+  .btn-sm { width: 100%; justify-content: center; }
+
+  .chat-container { height: calc(100vh - 120px); }
+  .chat-bubble { max-width: 90%; }
+}
+
+@media (max-width: 480px) {
+  .metric-grid { grid-template-columns: 1fr; }
+  .metric-value { font-size: 24px; }
+  .sidebar { width: 85%; }
 }

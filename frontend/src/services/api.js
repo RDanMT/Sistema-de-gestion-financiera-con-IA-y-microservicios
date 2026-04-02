@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = import.meta.env.VITE_BFF_URL || '';
+const baseURL = (import.meta.env.VITE_BFF_URL || '').replace(/\/$/, '');
 
 const api = axios.create({
   baseURL: baseURL + '/api',
